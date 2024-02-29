@@ -17,7 +17,7 @@ function $$ (selector, context = document) {
 
 // part 3: automatic navigaion menu
 let pages = {
-	"": "Home",
+	"/": "Home",
 	/* add the rest of your pages here */
 	"projects": "Projects",
 	"resume": "Resume",
