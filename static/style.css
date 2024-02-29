@@ -1,0 +1,127 @@
+body {
+    /* Set line height to 1.5 times the font size
+       and use the OS’s UI font as the website font
+     */
+    font: 100%/1.5 system-ui;
+    max-width: 100ch ;
+    margin-inline: auto;
+    padding: 2em;
+}
+
+:root {
+    --color-accent: rgb(245, 204, 210);
+}
+   
+
+.panda-img {
+    width: 30vw;
+}
+
+.nav-bar {
+    --border-color: oklch(50% 10% 200 / 40%);
+    display: flex;
+    margin-bottom: 1em ;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border-color);
+}
+
+.nav-link {
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    padding: .5em;
+}
+
+.current {
+    border-bottom: solid .4em oklch(90% 3% 200);
+    padding-bottom: .2em;
+}
+
+a:hover {
+    border-bottom: solid .4em var(--color-accent);
+    padding-bottom: .2em;
+}  
+
+
+/* try with block */
+/* .contact-elements {
+    display: block;
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    margin-block: .5em;
+} */
+
+
+.contact-form {
+    display: grid;
+    grid-template-columns: auto 1fr ;
+    gap: 1em;
+}
+
+.contact-elements{
+    display: grid;
+    grid-column: 1/-1;
+    grid-template-columns: subgrid;
+}
+
+img {
+    max-width: 100%
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    gap: .5em;
+}
+
+.projects article {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+}
+
+.projects h2 {
+    margin: 0;
+}
+
+h1 {
+ font-size: 400%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    text-wrap: balance;
+}
+
+.resume {
+    display: grid;
+    gap: 1em;
+}
+
+.resume-section {
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+.resume-section h4, p{
+   margin: 5px 0px 5px 0px;
+}
+
+.resume-section h2 {
+    margin-bottom: 5px;
+}
+
+.experiences {
+    margin-top: 5px;
+}
+
+.color-scheme {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 80%;
+    font-family: inherit;
+}

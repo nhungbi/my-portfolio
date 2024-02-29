@@ -1,2 +1,3 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>Nhung Van</h1>
+<p>I'm a junior studying CS and AI.</p>
+<img class = 'panda-img' src="./images/panda.png" alt="A picture of a panda.">
