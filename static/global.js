@@ -8,9 +8,9 @@ function $$ (selector, context = document) {
 let pages = {
 	"/": "Home",
 	/* add the rest of your pages here */
-	"projects": "Projects",
-	"resume": "Resume",
-	"contact": "Contact",
+	"/projects": "Projects",
+	"/resume": "Resume",
+	"/contact": "Contact",
 };
 
 let nav = document.createElement("nav");
