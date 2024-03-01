@@ -28,7 +28,7 @@ let nav = document.createElement("nav");
 nav.classList.add('nav-bar')
 document.body.prepend(nav);
 
-const ARE_WE_HOME = document.documentElement.classList.contains("home");
+const ARE_WE_HOME = document.getElementsByClassName("home");
 
 // if (location.host !== '127.0.0.1:5500') {
 	
@@ -44,9 +44,10 @@ const ARE_WE_HOME = document.documentElement.classList.contains("home");
 
 for (let url in pages) {
 	let title = pages[url];
-
+	console.log(' home',ARE_WE_HOME )
 
 	if (!ARE_WE_HOME && !url.startsWith("http")) {
+		console.log('no home')
 		url = "../" + url;
 	}
 

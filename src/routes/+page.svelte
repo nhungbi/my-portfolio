@@ -2,7 +2,7 @@
     import projects from '$lib/projects.json';
     import Project from "$lib/Project.svelte";
 </script>
-<h1>Nhung Van</h1>
+<h1 class="home" >Nhung Van</h1>
 <p>I'm a junior studying CS and AI.</p>
 <img class = 'panda-img' src="./images/panda.png" alt="A picture of a panda.">
 <h2> Latest Projects </h2>
