@@ -77,14 +77,10 @@ img {
     gap: .5em;
 }
 
-.projects article {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 3;
-}
-
-.projects h2 {
-    margin: 0;
+.highlights {
+    padding: 1em;
+    border: solid 1px pink;
+    border-radius: 10px;
 }
 
 h1 {
@@ -125,3 +121,4 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 80%;
     font-family: inherit;
 }
+
