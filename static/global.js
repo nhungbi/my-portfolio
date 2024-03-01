@@ -5,31 +5,43 @@ function $$ (selector, context = document) {
 }
 
 // part 3: automatic navigaion menu
-let pages = {
-	"/": "Home",
-	/* add the rest of your pages here */
-	"/projects": "Projects",
-	"/resume": "Resume",
-	"/contact": "Contact",
-};
+// let pages = {
+// 	"": "Home",
+// 	/* add the rest of your pages here */
+// 	"projects": "Projects",
+// 	"resume": "Resume",
+// 	"contact": "Contact",
+// };
+let pages = [
+	{url: "/", title: "Home"},
+	{url: "projects", title: "Projects"},
+	// add the rest of your pages here
+	{url: "resume", title: "Resume"},
+	{url: "contact", title: "Contact"},
+
+];
 
 let nav = document.createElement("nav");
 nav.classList.add('nav-bar')
 document.body.prepend(nav);
 
-for (let url in pages) {
-	let title = pages[url];
+for (let p of pages) {
+	let url = p.url;
+	let title = p.title;
 
 
 	let a = document.createElement("a");
 	a.href = url;
 	a.textContent = title;
+	console.log(a.host, location.host, a.pathname, location.pathname)
 	// check for current
 	if (a.host === location.host && a.pathname === location.pathname) {
 		a.classList.add("current");
 	} else {
 		a.target = "_blank";
 	}
+	// a.classList.toggle("current", a.host === location.host && a.pathname === location.pathname);
+
 	a.classList.add('nav-link')
 
 	nav.append(a);
