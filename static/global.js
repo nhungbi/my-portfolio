@@ -13,7 +13,7 @@ function $$ (selector, context = document) {
 // 	"contact": "Contact",
 // };
 let pages = [
-	{url: "", title: "Home"},
+	{url: ".", title: "Home"},
 	{url: "projects", title: "Projects"},
 	// add the rest of your pages here
 	{url: "resume", title: "Resume"},
