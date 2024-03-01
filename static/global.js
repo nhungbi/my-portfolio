@@ -3,17 +3,6 @@ console.log("IT’S ALIVE!");
 function $$ (selector, context = document) {
 	return Array.from(context.querySelectorAll(selector));
 }
-// part 2
-// // list of all of the nav links
-// const navLinks = $$("nav a")
-
-// let currentLink = navLinks.find(a => a.host === location.host && a.pathname === location.pathname)
-
-// // add current class to current page link
-// // if (currentLink) { // or if (currentLink !== undefined)
-// // 	currentLink.classList.add("current");
-// // }
-// currentLink?.classList.add("current");
 
 // part 3: automatic navigaion menu
 let pages = {
@@ -28,30 +17,8 @@ let nav = document.createElement("nav");
 nav.classList.add('nav-bar')
 document.body.prepend(nav);
 
-const ARE_WE_HOME = document.getElementsByClassName("home");
-
-// if (location.host !== '127.0.0.1:5500') {
-	
-// 	console.log('no local',location.host )
-// 	pages = {
-// 		"portfolio": "Home",
-// 		/* add the rest of your pages here */
-// 		"portfolio/projects/": "Projects",
-// 		"portfolio/resume/": "Resume",
-// 		"portfolio/contact/": "Contact",
-// 	};
-// }
-
 for (let url in pages) {
 	let title = pages[url];
-	console.log(' home',ARE_WE_HOME )
-
-	if (!ARE_WE_HOME && !url.startsWith("http")) {
-		console.log('no home')
-		url = "../" + url;
-	}
-
-	// url = ARE_WE_HOME && !url.startsWith("http") ? url : "../" + url;
 
 
 	let a = document.createElement("a");
@@ -64,9 +31,7 @@ for (let url in pages) {
 		a.target = "_blank";
 	}
 	a.classList.add('nav-link')
-	// a.classList.toggle("current", a.host === location.host && a.pathname === location.pathname);
 
-	
 	nav.append(a);
 }
 
