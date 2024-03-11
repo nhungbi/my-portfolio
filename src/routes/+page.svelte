@@ -1,11 +1,24 @@
 <script> 
     import projects from '$lib/projects.json';
     import Project from "$lib/Project.svelte";
-
-
-    
-
 </script>
+
+<style>
+    dl {
+        display: grid;
+        grid-template-columns: max-content;
+        grid-gap: 5px;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin: 0;
+        grid-column-start: 2;
+    }
+</style>
 
 <h1>Nhung Van</h1>
 
