@@ -1,62 +1,74 @@
 [
     {
+        "title": "Charles River Watershed Map",
+        "year": "2023",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "Designed a user-friendly interactive restoration map for the Charles River."
+    },
+    {
+        "title": "Learn a word",
+        "year": "2022",
+        "image": "https://user-images.githubusercontent.com/105992987/187275264-497944a2-7d49-4dd5-aa8d-9ed863e0aee5.png",
+        "description": "A simple website that allows users to learn random words by retyping the definition. In addition, a side game named 'Cuppy' (inspired by Hangman) is used to grab a random word that the user has learned to review."
+    },
+    {
+        "title": "RantHub",
+        "year": "2023",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "A website for ranting and listening anonymously."
+    },
+    {
+        "title": "Summary of the Population Under 18 Years Old",
+        "year": "2024",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "The bubble chart displays the population under 18 years old based on different housing types with the size of the bubbles characterizing the size of the population. The pink bubbles represent the population living in multifamily housing zones, and the purple bubbles represent the population living in single-family housing zones."
+    },
+    {
+        "title": "UnitedPlanet Website for volunteers",
+        "year": "2023",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "Built a full stack system for coordinators to organize data for volunteers "
+    },
+    {
+        "title": "Math Fish Pygame",
+        "year": "2022",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "Constructed an educational math game targeting elementary students using Pygame with three other students."
+    },
+    {
         "title": "Lorem ipsum dolor sit.",
+        "year": "2021",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium assumenda sapiente repudiandae deserunt. Adipisci quidem laudantium fugit ad eveniet hic distinctio vero! In velit dolorum accusantium quidem natus non? Id?"
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     },
     {
-        "title": "Earum officia nostrum voluptatem!",
+        "title": "Lorem ipsum dolor sit.",
+        "year": "2023",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Qui ea et, earum molestias numquam nulla at vel ab voluptatem voluptatum. Ipsam eligendi ipsum, amet in ex ipsa quia, illo nihil vero nulla debitis possimus qui voluptas nemo aspernatur?"
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     },
     {
-        "title": "Pariatur consequatur sapiente eius?",
+        "title": "Lorem ipsum dolor sit.",
+        "year": "2023",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Odio, aspernatur perferendis officiis molestiae atque expedita enim facilis, voluptate repudiandae dolor itaque ullam neque. Itaque nam iste eligendi autem soluta assumenda magnam nisi, sed amet hic sapiente. Suscipit, illum!"
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     },
     {
-        "title": "Harum amet asperiores assumenda!",
+        "title": "Lorem ipsum dolor sit.",
+        "year": "2023",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Itaque est vitae aspernatur inventore dignissimos eum ut unde reiciendis in ducimus optio voluptatum facilis veniam libero rerum excepturi blanditiis provident suscipit amet sapiente, iste, quasi ipsa iure. Modi, temporibus."
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     },
     {
-        "title": "Facere debitis nisi aperiam?",
+        "title": "Lorem ipsum dolor sit.",
+        "year": "2022",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Nam, eos fugiat doloribus ea, animi nulla deserunt beatae similique fugit nobis eum asperiores dicta reprehenderit iure! Nesciunt, odit? Autem nihil quasi, earum quod ea unde. Explicabo animi cumque nam?"
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     },
     {
-        "title": "Impedit quasi illum in.",
+        "title": "Lorem ipsum dolor sit.",
+        "year": "2022",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Vel alias unde consequatur tempora repudiandae hic provident ducimus, aliquam quidem accusamus voluptas sint? Fugit, autem modi neque laudantium totam reprehenderit minima alias illo maiores sint sunt. Odit, magni dolorem!"
-    },
-    {
-        "title": "Natus quasi minus ad.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Repudiandae officia minima, tempora sequi dolorem possimus error quas enim, eaque dolore cupiditate voluptatum sunt expedita. Harum dignissimos aliquid, quo expedita vel quae quisquam. Quasi adipisci non fugit blanditiis explicabo!"
-    },
-    {
-        "title": "Commodi repudiandae omnis architecto.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Amet nesciunt minus odio illum minima sunt ex deleniti ipsam expedita optio, perspiciatis asperiores animi beatae maxime neque vitae quis quasi rem rerum dignissimos alias commodi id sint aliquam! Unde."
-    },
-    {
-        "title": "Ipsum, doloremque. Cumque, ab.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Praesentium exercitationem, libero ullam enim itaque voluptatum corporis? Consequatur, voluptatibus? Aperiam neque architecto at aliquid, vitae dolore reprehenderit, aut ab ipsam error molestias a sunt voluptas magni. Exercitationem, facilis saepe?"
-    },
-    {
-        "title": "Cumque, officia. Modi, temporibus!",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Voluptas amet dolores, dolore veritatis magni facere sequi ullam architecto velit eum placeat doloribus tempore laborum, fugit facilis maxime a nesciunt impedit, delectus mollitia vitae neque consequuntur cupiditate. Veniam, laboriosam."
-    },
-    {
-        "title": "Repellat voluptatibus adipisci magni.",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Eveniet corporis numquam laudantium blanditiis dignissimos quo tempore delectus voluptatum pariatur enim perspiciatis vel, praesentium at perferendis quasi officia iure eaque quis repudiandae? Dolorum sapiente quam at minima, ipsa ad?"
-    },
-    {
-        "title": "Eum recusandae suscipit facilis?",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Nobis facere deleniti consectetur perferendis ea! Amet ut reprehenderit, ex molestiae autem harum exercitationem consequuntur optio laudantium dolores nobis minima necessitatibus totam veritatis id nisi nihil quae alias natus odio?"
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
     }
 ]

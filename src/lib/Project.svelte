@@ -7,7 +7,7 @@
     article {
         display: grid;
         grid-template-rows: subgrid;
-        grid-row: span 3;
+        grid-row: span 4;
     }
 
     h2 {
@@ -21,6 +21,7 @@
 </style>
 <article>
     <svelte:element this={"h" + hLevel}>{ p.title }</svelte:element>
+    <p> {p.year} </p>
     <img src={p.image} alt="">
     <p>{p.description}</p>
 </article>
