@@ -19,6 +19,19 @@
         return { value: count, label: year };
     });
 
+    let query = "";
+
+    let filteredProjects;
+    $: filteredProjects = projects.filter(project => {
+        if (query) {
+            return project.title.includes(query);
+        }
+
+        return true;
+    });
+
+
+
 
 </script>
 
@@ -26,11 +39,16 @@
 	<title>Projects</title>
 </svelte:head>
 
+<h1>Projects { projects.length }</h1>
+
 <Pie data={pieData1}/>
 
-<h1>Projects { projects.length }</h1>
+<input type="search" bind:value={query}
+       aria-label="Search projects" placeholder="🔍 Search projects…" />
+
+
 <div class="projects">
-{#each projects as p}
+{#each filteredProjects as p}
     <Project info={p} />
 {/each}
 
