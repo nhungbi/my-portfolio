@@ -10,13 +10,6 @@
         { value: 5, label: "cherries" }
     ];
 
-
-
-    // let total = 0;
-    // for (let d of data) {
-    //    total += d;
-    // }
-
     let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 
@@ -36,8 +29,6 @@
     let arcData = sliceGenerator(data);
     let arcs = arcData.map(d => arcGenerator(d));
 
-
-
 </script>
 <style>
 
@@ -46,25 +37,59 @@
         margin-block: 2em;
 
         /* Do not clip shapes outside the viewBox */
-        overflow: visible;
+        /* overflow: visible; */
     }
+
+    .swatch {
+        width: 15px;
+        height: 15px;
+        background-color: var(--color);
+        display: inline-block; 
+        border-radius: 50%;
+    }
+
+    .legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+        border: solid rgb(159, 157, 157) 1px;
+        padding: 1rem;
+        gap: 10px;
+        margin: 1rem;
+        flex: 1;
+    }
+
+    .legend-elt {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
 
 </style>
 
-<svg viewBox="-50 -50 100 100">
-	{#each arcs as arc, i}
-        <path d={ arc } fill={ colors(i) } />
-    {/each}
-</svg>
+<div class="container">
+    <svg viewBox="-50 -50 100 100">
+        {#each arcs as arc, i}
+            <path d={ arc } fill={ colors(i) } />
+        {/each}
+    </svg>
 
-<ul class="legend">
-	{#each data as d, index}
-		<li style="--color: { colors(index) }">
-			<span class="swatch"></span>
-			{d.label} <em>({d.value})</em>
-		</li>
-	{/each}
-</ul>
+    <ul class="legend">
+        {#each data as d, index}
+            <li class = "legend-elt" style="--color: { colors(index) }">
+                <span class="swatch"></span>
+
+                {d.label} <em>({d.value})</em>
+            </li>
+        {/each}
+    </ul>
+</div>
 
 
 
