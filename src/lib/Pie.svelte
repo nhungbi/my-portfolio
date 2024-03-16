@@ -6,22 +6,28 @@
 
     let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-
-    // let angle = 0;
-    // let arcData = [];
-    // for (let d of data) {
-    //    let endAngle = angle + (d / total) * 2 * Math.PI;
-    //    arcData.push({ startAngle: angle, endAngle });
-    //    angle = endAngle;
-    // }
-
     let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
-    // let arcs = arcData.map(d => arcGenerator(d));
 
     // cleaner way
     let sliceGenerator = d3.pie().value(d => d.value);
-    let arcData = sliceGenerator(data);
-    let arcs = arcData.map(d => arcGenerator(d));
+
+    let arcData;
+    let arcs;
+
+    $: {
+        arcData = sliceGenerator(data);
+        arcs = arcData.map(d => arcGenerator(d));
+    }
+   
+    export let selectedIndex = -1;
+
+    function toggleWedge (index, event) {
+	if (!event.key || event.key === "Enter") {
+		selectedIndex = index;
+	}
+}
+
+    /* selectedIndex = selectedIndex === index ? -1 : index */
 
 </script>
 <style>
@@ -33,6 +39,21 @@
         /* Do not clip shapes outside the viewBox */
         /* overflow: visible; */
     }
+
+    svg:has(path:hover, path:focus-visible) {
+        path:not(:hover, :focus-visible) {
+            opacity: 50%;
+        }
+    }
+
+
+    path {
+	    transition: 300ms;
+        cursor: pointer;
+        outline: none;
+    }
+
+
 
     .swatch {
         width: 15px;
@@ -64,13 +85,23 @@
         gap: 1rem;
     }
 
+    .selected {
+        --color: oklch(60% 45% 0) !important;
 
+        &:is(path) {
+            fill: var(--color);
+        }
+    }
 </style>
 
 <div class="container">
     <svg viewBox="-50 -50 100 100">
-        {#each arcs as arc, i}
-            <path d={ arc } fill={ colors(i) } />
+        {#each arcs as arc, index}
+            <path aria-label = "pie" role="button" tabindex="0" d={arc} fill={ colors(index) }
+                class:selected={selectedIndex === index}
+                on:click={e => toggleWedge(index, e)}
+                on:keyup={e => toggleWedge(index, e)}
+                />
         {/each}
     </svg>
 

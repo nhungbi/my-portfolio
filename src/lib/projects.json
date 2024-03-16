@@ -1,15 +1,16 @@
 [
-    {
-        "title": "Charles River Watershed Map",
-        "year": "2023",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Designed a user-friendly interactive restoration map for the Charles River."
-    },
+    
     {
         "title": "Learn a word",
         "year": "2022",
         "image": "https://user-images.githubusercontent.com/105992987/187275264-497944a2-7d49-4dd5-aa8d-9ed863e0aee5.png",
         "description": "A simple website that allows users to learn random words by retyping the definition. In addition, a side game named 'Cuppy' (inspired by Hangman) is used to grab a random word that the user has learned to review."
+    },
+    {
+        "title": "Charles River Watershed Map",
+        "year": "2023",
+        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
+        "description": "Designed a user-friendly interactive restoration map for the Charles River."
     },
     {
         "title": "RantHub",

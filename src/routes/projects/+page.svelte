@@ -13,24 +13,43 @@
         { value: 5, label: "cherries" }
     ];
 
-    let rolledData = d3.rollups(projects, v => v.length, d => d.year);
-
-    let pieData1 = rolledData.map(([year, count]) => {
-        return { value: count, label: year };
-    });
-
     let query = "";
 
     let filteredProjects;
-    $: filteredProjects = projects.filter(project => {
+    let filteredByYear;
+    $: filteredProjects = projects.filter((project) => {
         if (query) {
-            return project.title.includes(query);
+            let values = Object.values(project).join("\n").toLowerCase();
+            return values.includes(query.toLowerCase());
         }
 
         return true;
     });
 
+    $:  filteredByYear = filteredProjects.filter((project) => {
+        if (selectedYear) {
+		    return project.year === selectedYear;
+	    }
 
+        return true;
+    });
+
+    // Make sure the variable definition is *outside* the block
+    let pieData1;
+    $: {
+        // Initialize to an empty object every time this runs
+        pieData = {};
+
+        // Calculate rolledData and pieData based on filteredProjects here
+        let rolledData = d3.rollups(filteredProjects, v => v.length, d => d.year);
+
+        pieData1 = rolledData.map(([year, count]) => {
+            return { value: count, label: year };
+        });
+    }
+    let selectedYearIndex = -1;
+    let selectedYear;
+    $: selectedYear = selectedYearIndex > -1 ? pieData1[selectedYearIndex].label : null;
 
 
 </script>
@@ -41,15 +60,15 @@
 
 <h1>Projects { projects.length }</h1>
 
-<Pie data={pieData1}/>
+<Pie data={pieData1} bind:selectedIndex={selectedYearIndex} />
+
 
 <input type="search" bind:value={query}
        aria-label="Search projects" placeholder="🔍 Search projects…" />
 
 
 <div class="projects">
-{#each filteredProjects as p}
-    <Project info={p} />
-{/each}
-
+    {#each filteredByYear as p}
+        <Project info={p} />
+    {/each}
 </div>

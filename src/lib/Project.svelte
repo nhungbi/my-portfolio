@@ -1,6 +1,6 @@
 <script>
     export let info = {};
-    let p = info;
+    // let p = info;
     export let hLevel = 2;
 </script>
 <style>
@@ -20,8 +20,8 @@
 
 </style>
 <article>
-    <svelte:element this={"h" + hLevel}>{ p.title }</svelte:element>
-    <p> {p.year} </p>
-    <img src={p.image} alt="">
-    <p>{p.description}</p>
+    <svelte:element this={"h" + hLevel}>{ info.title }</svelte:element>
+    <p> {info.year} </p>
+    <img src={info.image} alt="">
+    <p>{info.description}</p>
 </article>
