@@ -22,12 +22,10 @@
     export let selectedIndex = -1;
 
     function toggleWedge (index, event) {
-	if (!event.key || event.key === "Enter") {
-		selectedIndex = index;
-	}
-}
-
-    /* selectedIndex = selectedIndex === index ? -1 : index */
+        if (!event.key || event.key === "Enter") {
+            selectedIndex = selectedIndex === index ? -1 : index;
+        } 
+    }
 
 </script>
 <style>
@@ -108,7 +106,7 @@
     <ul class="legend">
         {#each data as d, index}
             <li class = "legend-elt" style="--color: { colors(index) }">
-                <span class="swatch"></span>
+                <span class="swatch" class:selected={selectedIndex === index}></span>
 
                 {d.label} <em>({d.value})</em>
             </li>
