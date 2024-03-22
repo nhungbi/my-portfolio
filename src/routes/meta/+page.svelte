@@ -21,6 +21,10 @@
     svg {
 		overflow: visible;
 	}
+    .gridlines {
+	    stroke-opacity: .2;
+    }
+
 </style>
 <script>
     import * as d3 from "d3";
@@ -40,7 +44,7 @@
     };
     usableArea.width = usableArea.right - usableArea.left;
     usableArea.height = usableArea.bottom - usableArea.top;
-
+    
     onMount(async () => {
         data = await d3.csv("loc.csv", row => ({
                     ...row,
@@ -88,12 +92,26 @@
 
 
     let xAxis, yAxis;
+    let yAxisGridlines;
     $: {
         if (xAxis && yAxis) {
             d3.select(xAxis).call(d3.axisBottom(xScale));
-            d3.select(yAxis).call(d3.axisLeft(yScale));
+            d3.select(yAxis).call(d3.axisLeft(yScale).tickFormat(d => String(d % 24).padStart(2, "0") + ":00"));
+
         }
     }
+
+    $: {
+        if (yScale) {
+            d3.select(yAxisGridlines).call(
+                d3.axisLeft(yScale)
+                .tickFormat("")
+                .tickSize(-usableArea.width)
+            );
+        }
+    }
+
+
 
     
 </script>
@@ -114,8 +132,13 @@
         {/each}
         </g>
 
+    <g class="gridlines" transform="translate({usableArea.left}, 0)" bind:this={yAxisGridlines} />
+
     <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
     <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
+    
+   
+
 </svg>
 
 
