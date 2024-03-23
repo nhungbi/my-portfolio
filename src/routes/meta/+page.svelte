@@ -213,6 +213,7 @@
     let languageBreakdown;
     $: languageBreakdown = d3.rollup(selectedLines, (line)=> line.length, (line) => line.type)
 
+    const format_percentage = d3.format(".1~%");
 </script>
 
 
@@ -268,6 +269,14 @@
 
 
 <p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
+
+<h3> Langauge Breakdown</h3>
+{#each languageBreakdown as [language, lines] }
+	<dl>
+        <dt>{language.toUpperCase()}</dt>
+	    <dd>{lines} lines ({format_percentage(lines/selectedLines.length)})</dd>
+    </dl>
+{/each}
 
 <h3>Summary</h3>
 <dl class="stats">
