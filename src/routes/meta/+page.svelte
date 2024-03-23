@@ -84,6 +84,9 @@
     import * as d3 from "d3";
     import { onMount } from "svelte";
 
+    import Pie from "$lib/Pie.svelte";
+
+
     let data = [];
     let commits = [];
     let width = 1000, height = 600;
@@ -277,6 +280,9 @@
 	    <dd>{lines} lines ({format_percentage(lines/selectedLines.length)})</dd>
     </dl>
 {/each}
+
+<Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} />
+
 
 <h3>Summary</h3>
 <dl class="stats">
