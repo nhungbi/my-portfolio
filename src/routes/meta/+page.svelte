@@ -25,6 +25,60 @@
 	    stroke-opacity: .2;
     }
 
+    dl.info {
+        display: grid;
+
+    }
+
+    .tooltip {
+        position: fixed;
+        /* top: 1em; */
+        /* top: left; */
+
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+        border-radius: 10px;
+        padding: 1em;
+
+        transition-duration: 500ms;
+        transition-property: opacity, visibility;
+
+        &[hidden]:not(:hover, :focus-within) {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    circle {
+
+
+        &:hover {
+            transform: scale(1.5);
+            transform-origin: center;
+            transform-box: fill-box;
+
+        }
+
+    }
+
+    @keyframes marching-ants {
+	to {
+		stroke-dashoffset: -8; /* 5 + 3 */
+	}
+    }
+
+    svg :global(.selection) {
+        fill-opacity: 10%;
+        stroke: black;
+        stroke-opacity: 70%;
+        stroke-dasharray: 5 3;
+        animation: marching-ants 2s linear infinite;
+    }
+
+    .selected {
+        fill: red;
+    }
+
 </style>
 <script>
     import * as d3 from "d3";
@@ -78,7 +132,7 @@
                 return ret;
             });
 
-            console.log(commits)            
+            // console.log(commits)            
 
             yScale = d3.scaleLinear()
                 .domain([0, 24])
@@ -88,6 +142,7 @@
                 .domain(d3.extent(commits.map(commit => commit.datetime)))
                 .range([usableArea.left, usableArea.right] )
                 .nice()
+
     });
 
 
@@ -112,22 +167,72 @@
     }
 
 
+    let hoveredIndex = -1;
+    $: hoveredCommit = commits[hoveredIndex] ?? {};
 
-    
+    let cursor = {x: 0, y: 0};
+
+    let svg;
+
+    let brushSelection;
+    function brushed (evt) {
+        brushSelection = evt.selection
+    }
+
+
+    function isCommitSelected (commit) {
+        if (!brushSelection) {
+            return false;
+            }
+        // TODO return true if commit is within brushSelection
+        // and false if not
+        let min = {x: brushSelection[0][0], y: brushSelection[0][1]};
+        let max = {x: brushSelection[1][0], y: brushSelection[1][1]};
+        let x = xScale(commit.date);
+        let y = yScale(commit.hourFrac);
+
+        return x >= min.x && x <= max.x && y >= min.y && y <= max.y;
+    }
+
+
+    let selectedCommits = [];
+    $: selectedCommits = brushSelection ? commits.filter(isCommitSelected) : [];
+    let hasSelection;
+    $: hasSelection = brushSelection && selectedCommits.length > 0;
+
+    $: {
+        d3.select(svg).call(d3.brush().on("start brush end", brushed));
+        d3.select(svg).selectAll(".dots, .overlay ~ *").raise();
+    }
+
+
+    let selectedLines;
+    $: selectedLines = (hasSelection ? selectedCommits : commits).flatMap(d => d.lines);
+
+   
+    let languageBreakdown;
+    $: languageBreakdown = d3.rollup(selectedLines, (line)=> line.length, (line) => line.type)
+
 </script>
 
 
 <h1>Meta</h1>
 
 <h3>Commits by time of day</h3>
-<svg viewBox="0 0 {width} {height}">
+<svg viewBox="0 0 {width} {height}" bind:this={svg}>
 	<g class="dots">
         {#each commits as commit, index }
             <circle
+                class:selected={selectedCommits.includes(commit)}
                 cx={ xScale(commit.datetime) }
                 cy={ yScale(commit.hourFrac) }
                 r="5"
                 fill="steelblue"
+	            on:mouseleave={evt => hoveredIndex = -1}
+                on:mouseenter={evt => {
+                    hoveredIndex = index;
+                    cursor = {x: evt.x, y: evt.y};
+                }}
             />
         {/each}
         </g>
@@ -137,12 +242,32 @@
     <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
     <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
     
-   
+    
 
 </svg>
 
+<dl hidden={hoveredIndex === -1} id="commit-tooltip" 
+    class="info tooltip" style="top: {cursor.y}px; left: {cursor.x}px">
+	<dt>Commit</dt>
+	<dd><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
+
+	<dt>Date</dt>
+	<dd>{ hoveredCommit.datetime?.toLocaleString("en", {date: "full"}) }</dd>
+
+	<!-- Add: Time, author, lines edited -->
+    <dt>Author</dt>
+	<dd>{ hoveredCommit.author}</dd>
+
+    <dt>Time</dt>
+	<dd>{ hoveredCommit.time}</dd>
+
+    <dt>Lines</dt>
+	<dd>{ hoveredCommit.totalLines}</dd>
+</dl>
 
 
+
+<p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
 
 <h3>Summary</h3>
 <dl class="stats">
