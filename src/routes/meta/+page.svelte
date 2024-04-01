@@ -135,7 +135,7 @@
                 return ret;
             });
 
-            // console.log(commits)            
+            console.log(commits)            
 
             yScale = d3.scaleLinear()
                 .domain([0, 24])
