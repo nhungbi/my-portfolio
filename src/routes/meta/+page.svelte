@@ -85,6 +85,13 @@
     import * as d3 from "d3";
     import { onMount } from "svelte";
 
+    import {
+        computePosition,
+        autoPlacement,
+        offset,
+    } from '@floating-ui/dom';
+
+
     import Pie from "$lib/Pie.svelte";
 
     let data = [];
@@ -149,6 +156,7 @@
     });
 
 
+
     let xAxis, yAxis;
     let yAxisGridlines;
     $: {
@@ -173,35 +181,33 @@
     let hoveredIndex = -1;
     $: hoveredCommit = commits[hoveredIndex] ?? {};
 
-    let cursor = {x: 0, y: 0};
+    // let cursor = {x: 0, y: 0};
 
     let svg;
 
-    let brushSelection;
     function brushed (evt) {
-        brushSelection = evt.selection
+        let brushSelection = evt.selection;
+        selectedCommits = !brushSelection ? [] : commits.filter(commit => {
+            let min = {x: brushSelection[0][0], y: brushSelection[0][1]};
+            let max = {x: brushSelection[1][0], y: brushSelection[1][1]};
+            let x = xScale(commit.date);
+            let y = yScale(commit.hourFrac);
+
+            return x >= min.x && x <= max.x && y >= min.y && y <= max.y;
+        });
+        
     }
 
 
     function isCommitSelected (commit) {
-        if (!brushSelection) {
-            return false;
-            }
-        // TODO return true if commit is within brushSelection
-        // and false if not
-        let min = {x: brushSelection[0][0], y: brushSelection[0][1]};
-        let max = {x: brushSelection[1][0], y: brushSelection[1][1]};
-        let x = xScale(commit.date);
-        let y = yScale(commit.hourFrac);
-
-        return x >= min.x && x <= max.x && y >= min.y && y <= max.y;
+        return selectedCommits.includes(commit);
     }
 
 
     let selectedCommits = [];
-    $: selectedCommits = brushSelection ? commits.filter(isCommitSelected) : [];
+
     let hasSelection;
-    $: hasSelection = brushSelection && selectedCommits.length > 0;
+    $: hasSelection =  selectedCommits.length > 0;
 
     $: {
         d3.select(svg).call(d3.brush().on("start brush end", brushed));
@@ -217,6 +223,35 @@
     $: languageBreakdown = d3.rollup(selectedLines, (line)=> line.length, (line) => line.type)
 
     const format_percentage = d3.format(".1~%");
+
+    let commitTooltip;
+    let tooltipPosition = {x: 0, y: 0};
+
+    async function dotInteraction (index, evt) {
+        let hoveredDot = evt.target;
+
+        
+
+        // code will go here
+        if (evt.type === "mouseenter" || evt.type === "focus") {
+            // dot hovered
+            hoveredIndex = index;
+            // cursor = {x: evt.x, y: evt.y};
+            tooltipPosition = await computePosition(hoveredDot, commitTooltip, {
+                strategy: "fixed", // because we use position: fixed
+                middleware: [
+                    offset(5), // spacing from tooltip to dot
+                    autoPlacement() // see https://floating-ui.com/docs/autoplacement
+                ],
+            });
+
+        }
+        else if (evt.type === "mouseleave" || evt.type === "blur") {
+            // dot unhovered
+            hoveredIndex = -1
+        }
+    }
+
 </script>
 
 
@@ -232,11 +267,13 @@
                 cy={ yScale(commit.hourFrac) }
                 r="5"
                 fill="steelblue"
-	            on:mouseleave={evt => hoveredIndex = -1}
-                on:mouseenter={evt => {
-                    hoveredIndex = index;
-                    cursor = {x: evt.x, y: evt.y};
-                }}
+	            on:mouseenter={evt => dotInteraction(index, evt)}
+	            on:mouseleave={evt => dotInteraction(index, evt)}
+                tabindex="0"
+                aria-describedby="commit-tooltip"
+                aria-haspopup="true"
+                on:focus={evt => dotInteraction(index, evt)}
+                on:blur= {evt => dotInteraction(index, evt)}
             />
         {/each}
         </g>
@@ -251,7 +288,11 @@
 </svg>
 
 <dl hidden={hoveredIndex === -1} id="commit-tooltip" 
-    class="info tooltip" style="top: {cursor.y}px; left: {cursor.x}px">
+    class="info tooltip" 
+    style="top: {tooltipPosition.y}px; left: {tooltipPosition.x}px"
+    bind:this={commitTooltip}
+    role="tooltip"
+    >
 	<dt>Commit</dt>
 	<dd><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
 
