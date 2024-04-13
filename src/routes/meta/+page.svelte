@@ -199,9 +199,9 @@
     }
 
 
-    function isCommitSelected (commit) {
-        return selectedCommits.includes(commit);
-    }
+    // function isCommitSelected (commit) {
+    //     return selectedCommits.includes(commit);
+    // }
 
 
     let selectedCommits = [];
@@ -230,9 +230,7 @@
     async function dotInteraction (index, evt) {
         let hoveredDot = evt.target;
 
-        
 
-        // code will go here
         if (evt.type === "mouseenter" || evt.type === "focus") {
             // dot hovered
             hoveredIndex = index;
@@ -244,12 +242,16 @@
                     autoPlacement() // see https://floating-ui.com/docs/autoplacement
                 ],
             });
-
         }
         else if (evt.type === "mouseleave" || evt.type === "blur") {
             // dot unhovered
             hoveredIndex = -1
         }
+        else if (evt.type === "click" ||
+            (evt.type == "keyup" && evt.key === "Enter" )) {
+                selectedCommits = [commits[index]]
+            }
+
     }
 
 </script>
@@ -274,6 +276,8 @@
                 aria-haspopup="true"
                 on:focus={evt => dotInteraction(index, evt)}
                 on:blur= {evt => dotInteraction(index, evt)}
+                on:click={evt => dotInteraction(index, evt)}
+                on:keyup={evt => dotInteraction(index, evt)}
             />
         {/each}
         </g>

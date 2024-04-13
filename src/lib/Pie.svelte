@@ -11,13 +11,13 @@
     // cleaner way
     let sliceGenerator = d3.pie().value(d => d.value);
 
-    let arcData;
-    let arcs;
+    // let arcData;
+    // let arcs;
 
-    $: {
-        arcData = sliceGenerator(data);
-        arcs = arcData.map(d => arcGenerator(d));
-    }
+    // $: {
+    //     arcData = sliceGenerator(data);
+    //     arcs = arcData.map(d => arcGenerator(d));
+    // }
    
     export let selectedIndex = -1;
 
@@ -26,6 +26,16 @@
             selectedIndex = selectedIndex === index ? -1 : index;
         } 
     }
+
+    let pieData;
+    $: {
+        pieData = data.map(d => ({...d}));
+        let arcData = sliceGenerator(data);
+        let arcs = arcData.map(d => arcGenerator(d));
+        pieData = pieData.map((d, i) => ({...d, ...arcData[i], arc: arcs[i]}));
+
+    };
+
 
 </script>
 <style>
@@ -91,21 +101,21 @@
         }
     }
 </style>
-
 <div class="container">
     <svg viewBox="-50 -50 100 100">
-        {#each arcs as arc, index}
-            <path aria-label = "pie" role="button" tabindex="0" d={arc} fill={ colors(index) }
-                class:selected={selectedIndex === index}
+
+        {#each pieData as d, index}
+	        <path d={d.arc} fill={ colors(d.label)}
+            class:selected={selectedIndex === index}
                 on:click={e => toggleWedge(index, e)}
-                on:keyup={e => toggleWedge(index, e)}
-                />
+                on:keyup={e => toggleWedge(index, e)}/>
         {/each}
+    
     </svg>
 
     <ul class="legend">
-        {#each data as d, index}
-            <li class = "legend-elt" style="--color: { colors(index) }">
+        {#each pieData as d, index}
+            <li class = "legend-elt" style="--color: {  colors(d.label) }">
                 <span class="swatch" class:selected={selectedIndex === index}></span>
 
                 {d.label} <em>({d.value})</em>
