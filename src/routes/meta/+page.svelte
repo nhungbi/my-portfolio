@@ -78,7 +78,17 @@
     .selected {
         fill: red;
     }
+    
+    .time-label {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr;
+    }
 
+    .time-label time {
+        display: block;
+        text-align: right;
+    }
 </style>
 
 <script>
@@ -109,6 +119,7 @@
     usableArea.width = usableArea.right - usableArea.left;
     usableArea.height = usableArea.bottom - usableArea.top;
     
+    let timeScale;
     onMount(async () => {
         data = await d3.csv("loc.csv", row => ({
                     ...row,
@@ -152,6 +163,11 @@
                 .domain(d3.extent(commits.map(commit => commit.datetime)))
                 .range([usableArea.left, usableArea.right] )
                 .nice()
+
+            timeScale = d3.scaleTime()
+            .domain(d3.extent(commits.map(commit => commit.datetime)))
+            .range([0, 100])
+            .nice()
 
     });
 
@@ -254,10 +270,19 @@
 
     }
 
+    let commitProgress = 0;
+    $: commitMaxTime = timeScale && timeScale.invert(commitProgress);
+
 </script>
 
 
 <h1>Meta</h1>
+
+<label class="time-label">
+    Show commits until:
+    <input type=range min="0" max="100" bind:value={commitProgress}>
+    <time>{commitMaxTime && commitMaxTime.toLocaleString("en", {dateStyle: "long", timeStyle: "short"})}</time>
+</label>
 
 <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
