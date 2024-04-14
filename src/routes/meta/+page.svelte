@@ -195,7 +195,7 @@
 
 
     let hoveredIndex = -1;
-    $: hoveredCommit = commits[hoveredIndex] ?? {};
+    $: hoveredCommit = filteredCommits[hoveredIndex] ?? {};
 
     // let cursor = {x: 0, y: 0};
 
@@ -203,7 +203,7 @@
 
     function brushed (evt) {
         let brushSelection = evt.selection;
-        selectedCommits = !brushSelection ? [] : commits.filter(commit => {
+        selectedCommits = !brushSelection ? [] : filteredCommits.filter(commit => {
             let min = {x: brushSelection[0][0], y: brushSelection[0][1]};
             let max = {x: brushSelection[1][0], y: brushSelection[1][1]};
             let x = xScale(commit.date);
@@ -270,8 +270,23 @@
 
     }
 
-    let commitProgress = 0;
+    let commitProgress = 100;
     $: commitMaxTime = timeScale && timeScale.invert(commitProgress);
+
+    $: filteredCommits = commits.filter(commit => {
+       return commit.datetime <= commitMaxTime;
+    });
+
+    $: filteredLines = data.filter(line => {
+       return line.datetime <= commitMaxTime;
+    });
+
+    $: xScale = d3.scaleTime()
+                .domain(d3.extent(filteredCommits.map(commit => commit.datetime)))
+                .range([usableArea.left, usableArea.right] )
+                .nice()
+  
+
 
 </script>
 
@@ -287,7 +302,7 @@
 <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
 	<g class="dots">
-        {#each commits as commit, index }
+        {#each filteredCommits as commit, index }
             <circle
                 class:selected={selectedCommits.includes(commit)}
                 cx={ xScale(commit.datetime) }
@@ -305,7 +320,7 @@
                 on:keyup={evt => dotInteraction(index, evt)}
             />
         {/each}
-        </g>
+    </g>
 
     <g class="gridlines" transform="translate({usableArea.left}, 0)" bind:this={yAxisGridlines} />
 
@@ -357,19 +372,19 @@
 <h3>Summary</h3>
 <dl class="stats">
     <dt>Commits</dt>
-	<dd>{commits.length}</dd>
+	<dd>{filteredCommits.length}</dd>
 
 	<dt>Total <abbr title="Lines of code">LOC</abbr></dt>
-	<dd>{data.length}</dd>
+	<dd>{filteredLines.length}</dd>
 
     <dt>Longest Line</dt>
-	<dd>{d3.max(data, d => d.length)}</dd>
+	<dd>{d3.max(filteredLines, d => d.length)}</dd>
 
     <dt>Average Line Length</dt>
 	<dd>{Math.round(d3.mean(data, d => d.length))}</dd>
 
     <dt>Files</dt>
-	<dd>{d3.group(data, d => d.file).size}</dd>
+	<dd>{d3.group(filteredLines, d => d.file).size}</dd>
 </dl>
 
 
