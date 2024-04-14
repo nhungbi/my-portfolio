@@ -57,9 +57,9 @@
             transform-box: fill-box;
         }
 
-        @starting-style {
+        /* @starting-style {
             r: 0;
-        }
+        } */
 
 
     }
@@ -218,11 +218,6 @@
     }
 
 
-    // function isCommitSelected (commit) {
-    //     return selectedCommits.includes(commit);
-    // }
-
-
     let selectedCommits = [];
 
     let hasSelection;
@@ -288,6 +283,9 @@
                 .domain(d3.extent(filteredCommits.map(commit => commit.datetime)))
                 .range([usableArea.left, usableArea.right] )
                 .nice()
+
+
+    import FileLines from "./FileLines.svelte";
   
 
 
@@ -301,6 +299,9 @@
     <input type=range min="0" max="100" bind:value={commitProgress}>
     <time>{commitMaxTime && commitMaxTime.toLocaleString("en", {dateStyle: "long", timeStyle: "short"})}</time>
 </label>
+
+<FileLines lines={filteredLines} />
+
 
 <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
@@ -329,8 +330,6 @@
 
     <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
     <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
-    
-    
 
 </svg>
 
@@ -356,8 +355,6 @@
     <dt>Lines</dt>
 	<dd>{ hoveredCommit.totalLines}</dd>
 </dl>
-
-
 
 <p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
 
