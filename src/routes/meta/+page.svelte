@@ -51,13 +51,16 @@
 
     circle {
 
-
         &:hover {
             transform: scale(1.5);
             transform-origin: center;
             transform-box: fill-box;
-
         }
+
+        @starting-style {
+            r: 0;
+        }
+
 
     }
 
@@ -302,7 +305,7 @@
 <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
 	<g class="dots">
-        {#each filteredCommits as commit, index }
+        {#each filteredCommits as commit, index (commit.id)  }
             <circle
                 class:selected={selectedCommits.includes(commit)}
                 cx={ xScale(commit.datetime) }
