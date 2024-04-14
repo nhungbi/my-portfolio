@@ -3,8 +3,9 @@
 
     export let data = [];
 
+    export let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-    let colors = d3.scaleOrdinal(d3.schemeTableau10);
+
 
     let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
@@ -33,7 +34,7 @@
         let arcData = sliceGenerator(data);
         let arcs = arcData.map(d => arcGenerator(d));
         pieData = pieData.map((d, i) => ({...d, ...arcData[i], arc: arcs[i]}));
-
+        // console.log(data)
     };
 
 

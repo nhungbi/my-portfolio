@@ -287,6 +287,7 @@
 
     import FileLines from "./FileLines.svelte";
   
+    let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 
 </script>
@@ -299,9 +300,6 @@
     <input type=range min="0" max="100" bind:value={commitProgress}>
     <time>{commitMaxTime && commitMaxTime.toLocaleString("en", {dateStyle: "long", timeStyle: "short"})}</time>
 </label>
-
-<FileLines lines={filteredLines} />
-
 
 <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
@@ -366,8 +364,9 @@
     </dl>
 {/each}
 
-<Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} />
+<Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} colors = {colors}/>
 
+<FileLines lines={filteredLines} colors ={colors}/>
 
 <h3>Summary</h3>
 <dl class="stats">
