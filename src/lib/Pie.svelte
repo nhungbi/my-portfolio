@@ -20,7 +20,7 @@
         } 
     }
 
-    let pieData;    
+    let pieData = [];
     let oldData = [];
 
     $: {
@@ -114,6 +114,8 @@
         let angle = sibling?.endAngle ?? 0;
         return {startAngle: angle, endAngle: angle};
     }
+
+
     let transitionDuration = 500;
 
     function arc (wedge) {
@@ -125,14 +127,11 @@
             css: (t, u) => {
                 // t is a number between 0 and 1 that represents the transition progress; u is 1 - t
                 // TODO return CSS to be applied for the current t as a string
-                return transition.interpolator(transition.type === "out" ? u : t)
+                return transition?.interpolator(transition.type === "out" ? u : t)
             },
             easing: d3.easeCubic
         }
 }
-
-
-
 
 
 
@@ -204,11 +203,11 @@
         }
     }
 
-    /* d {
+    .container d {
         transition: 300ms;
         transition-property: transform, opacity, fill;
 
-    } */
+    } 
 
 
     
