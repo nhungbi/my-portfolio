@@ -5,20 +5,12 @@
 
     export let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-
-
     let arcGenerator = d3.arc().innerRadius(0).outerRadius(50);
 
     // cleaner way
-    let sliceGenerator = d3.pie().value(d => d.value);
+    // let sliceGenerator = d3.pie().value(d => d.value);
+    let sliceGenerator = d3.pie().value(d => d.value).sort(null);
 
-    // let arcData;
-    // let arcs;
-
-    // $: {
-    //     arcData = sliceGenerator(data);
-    //     arcs = arcData.map(d => arcGenerator(d));
-    // }
    
     export let selectedIndex = -1;
 
@@ -28,17 +20,128 @@
         } 
     }
 
-    let pieData;
+    let pieData;    
+    let oldData = [];
+
     $: {
+        oldData = pieData;
+        pieData = d3.sort(data, d => d.label);
+
         pieData = data.map(d => ({...d}));
         let arcData = sliceGenerator(data);
         let arcs = arcData.map(d => arcGenerator(d));
         pieData = pieData.map((d, i) => ({...d, ...arcData[i], arc: arcs[i]}));
         // console.log(data)
+        transitionArcs()
     };
+
+    function sameArc(d_old, d) {
+        if (d_old && d) {
+            if (d_old.startAngle === d.startAngle &&
+                d_old.endAngle === d.endAngle) {
+                    return true
+                }
+            return false
+        }
+
+        return true
+    }
+
+    function transitionArc (wedge, label) {
+        label ??= Object.entries(wedges).find(([label, w]) => w === wedge)[0];
+
+        let d = pieData.find(d => d.label === label);
+        let d_old = oldData.find(d => d.label === label);
+
+        let from = d_old ? {...d_old} : getEmptyArc(label, oldData);
+        let to = d ? {...d} : getEmptyArc(label, oldData);
+
+        let angleInterpolator = d3.interpolate(from, to);
+
+
+        let interpolator = t => `path("${ arcGenerator(angleInterpolator(t)) }")`;
+
+        let type = d ? d_old ? "update" : "in" : "out";
+
+
+        return {d, d_old, from, to, type, interpolator};
+    }
+
+
+    let wedges = {};
+    function transitionArcs() {
+        let wedgeElements = Object.values(wedges);
+
+        d3.selectAll(wedgeElements).transition("arc")
+            .duration(transitionDuration)
+            .styleTween("d", function (_, index) {
+                let wedge = this;
+                // Calculations that will only be done once per element go here
+                let label = Object.keys(wedges)[index];
+
+                // let d = pieData.find(d => d.label === label);
+                // let d_old = oldData.find(d => d.label === label);
+
+                // let from = d_old ? {...d_old} : getEmptyArc(label, oldData);
+                // let to = d ? {...d} : getEmptyArc(label, oldData);
+
+                // let angleInterpolator = d3.interpolate(from, to);
+                // let interpolator = t => `path("${ arcGenerator(angleInterpolator(t)) }")`;
+
+                let transition = transitionArc(wedge, label);
+                if (sameArc(transition.d_old, transition.d)) {
+                    return null;
+                }
+                return transition?.interpolator;
+
+                // return interpolator;
+
+            });
+    }
+
+    function getEmptyArc (label, data = pieData) {
+        // Union of old and new labels in the order they appear
+        let labels = d3.sort(new Set([...oldData, ...pieData].map(d => d.label)));
+        let labelIndex = labels.indexOf(label);
+        let sibling;
+        for (let i = labelIndex - 1; i >= 0; i--) {
+            sibling = data.find(d => d.label === labels[i]);
+            if (sibling) {
+                break;
+            }
+        }
+
+        let angle = sibling?.endAngle ?? 0;
+        return {startAngle: angle, endAngle: angle};
+    }
+    let transitionDuration = 500;
+
+    function arc (wedge) {
+        // Calculations that will only be done once per element go here
+        let transition = transitionArc(wedge, undefined);
+
+        return {
+            duration: transitionDuration,
+            css: (t, u) => {
+                // t is a number between 0 and 1 that represents the transition progress; u is 1 - t
+                // TODO return CSS to be applied for the current t as a string
+                return transition.interpolator(transition.type === "out" ? u : t)
+            },
+            easing: d3.easeCubic
+        }
+}
+
+
+
+
+
+
+
+
 
 
 </script>
+
 <style>
 
     svg {
@@ -61,7 +164,6 @@
         cursor: pointer;
         outline: none;
     }
-
 
 
     .swatch {
@@ -101,15 +203,28 @@
             fill: var(--color);
         }
     }
+
+    /* d {
+        transition: 300ms;
+        transition-property: transform, opacity, fill;
+
+    } */
+
+
+    
 </style>
+
 <div class="container">
     <svg viewBox="-50 -50 100 100">
 
-        {#each pieData as d, index}
+        {#each pieData as d, index (d.label)}
 	        <path d={d.arc} fill={ colors(d.label)}
             class:selected={selectedIndex === index}
                 on:click={e => toggleWedge(index, e)}
-                on:keyup={e => toggleWedge(index, e)}/>
+                on:keyup={e => toggleWedge(index, e)}
+                bind:this={ wedges[d.label] }
+                transition:arc
+                />
         {/each}
     
     </svg>
