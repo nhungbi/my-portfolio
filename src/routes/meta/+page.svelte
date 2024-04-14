@@ -3,6 +3,10 @@
 </svelte:head>
 
 <style>
+    :global(body) {
+        max-width: min(120ch, 80vw);
+    }
+
     dl {
         display: grid;
         grid-template-columns: max-content;
@@ -106,6 +110,9 @@
 
 
     import Pie from "$lib/Pie.svelte";
+
+    import Scrolly from "svelte-scrolly";
+
 
     let data = [];
     let commits = [];
@@ -268,8 +275,12 @@
 
     }
 
-    let commitProgress = 100;
+    let commitProgress = 0;
     $: commitMaxTime = timeScale && timeScale.invert(commitProgress);
+
+   $: {
+    console.log('here,', commitProgress)
+   } 
 
     $: filteredCommits = commits.filter(commit => {
        return commit.datetime <= commitMaxTime;
@@ -295,13 +306,13 @@
 
 <h1>Meta</h1>
 
-<label class="time-label">
+<!-- <label class="time-label">
     Show commits until:
     <input type=range min="0" max="100" bind:value={commitProgress}>
     <time>{commitMaxTime && commitMaxTime.toLocaleString("en", {dateStyle: "long", timeStyle: "short"})}</time>
-</label>
+</label> -->
 
-<h3>Commits by time of day</h3>
+<!-- <h3>Commits by time of day</h3>
 <svg viewBox="0 0 {width} {height}" bind:this={svg}>
 	<g class="dots">
         {#each filteredCommits as commit, index (commit.id)  }
@@ -329,7 +340,7 @@
     <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
     <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
 
-</svg>
+</svg> -->
 
 <dl hidden={hoveredIndex === -1} id="commit-tooltip" 
     class="info tooltip" 
@@ -354,7 +365,7 @@
 	<dd>{ hoveredCommit.totalLines}</dd>
 </dl>
 
-<p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
+<!-- <p>{hasSelection ? selectedCommits.length : "No"} commits selected</p> -->
 
 <h3> Langauge Breakdown</h3>
 {#each languageBreakdown as [language, lines] }
@@ -364,9 +375,9 @@
     </dl>
 {/each}
 
-<Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} colors = {colors}/>
+<!-- <Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} colors = {colors}/> -->
 
-<FileLines lines={filteredLines} colors ={colors}/>
+<!-- <FileLines lines={filteredLines} colors ={colors}/> -->
 
 <h3>Summary</h3>
 <dl class="stats">
@@ -385,5 +396,54 @@
     <dt>Files</dt>
 	<dd>{d3.group(filteredLines, d => d.file).size}</dd>
 </dl>
+
+<Scrolly bind:progress={commitProgress}>
+	{#each commits as commit, index }
+        <p>
+            On {commit.datetime.toLocaleString("en", {dateStyle: "full", timeStyle: "short"})},
+            I made <a href="{commit.url}" target="_blank">{ index > 0 ? 'another glorious commit' : 'my first commit, and it was glorious' }</a>.
+            I edited {commit.totalLines} lines across { d3.rollups(commit.lines, D => D.length, d => d.file).length } files.
+            Then I looked over all I had made, and I saw that it was very good.
+        </p>
+    {/each}
+
+	<svelte:fragment slot="viz">
+		<!-- Visualizations here -->
+        <h3>Commits by time of day</h3>
+        <time>{commitMaxTime && commitMaxTime.toLocaleString("en", {dateStyle: "long", timeStyle: "short"})}</time>
+        <svg viewBox="0 0 {width} {height}" bind:this={svg}>
+            <g class="dots">
+                {#each filteredCommits as commit, index (commit.id)  }
+                    <circle
+                        class:selected={selectedCommits.includes(commit)}
+                        cx={ xScale(commit.datetime) }
+                        cy={ yScale(commit.hourFrac) }
+                        r="5"
+                        fill="steelblue"
+                        on:mouseenter={evt => dotInteraction(index, evt)}
+                        on:mouseleave={evt => dotInteraction(index, evt)}
+                        tabindex="0"
+                        aria-describedby="commit-tooltip"
+                        aria-haspopup="true"
+                        on:focus={evt => dotInteraction(index, evt)}
+                        on:blur= {evt => dotInteraction(index, evt)}
+                        on:click={evt => dotInteraction(index, evt)}
+                        on:keyup={evt => dotInteraction(index, evt)}
+                    />
+                {/each}
+            </g>
+
+            <g class="gridlines" transform="translate({usableArea.left}, 0)" bind:this={yAxisGridlines} />
+
+            <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
+            <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
+
+        </svg>
+        <p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
+
+        <Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} colors = {colors}/>
+	</svelte:fragment>
+</Scrolly>
+
 
 
