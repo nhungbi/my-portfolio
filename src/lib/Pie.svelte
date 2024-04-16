@@ -24,9 +24,8 @@
     let oldData = [];
 
     $: {
-        oldData = pieData;
         pieData = d3.sort(data, d => d.label);
-
+        oldData = pieData;
         pieData = data.map(d => ({...d}));
         let arcData = sliceGenerator(data);
         let arcs = arcData.map(d => arcGenerator(d));
@@ -116,7 +115,7 @@
     }
 
 
-    let transitionDuration = 500;
+    let transitionDuration = 2000;
 
     function arc (wedge) {
         // Calculations that will only be done once per element go here
@@ -129,7 +128,7 @@
                 // TODO return CSS to be applied for the current t as a string
                 return transition?.interpolator(transition.type === "out" ? u : t)
             },
-            easing: d3.easeCubic
+            easing: d3.easeCubic()
         }
 }
 

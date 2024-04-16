@@ -404,6 +404,7 @@
             I made <a href="{commit.url}" target="_blank">{ index > 0 ? 'another glorious commit' : 'my first commit, and it was glorious' }</a>.
             I edited {commit.totalLines} lines across { d3.rollups(commit.lines, D => D.length, d => d.file).length } files.
             Then I looked over all I had made, and I saw that it was very good.
+            It looks like I make commits often to keep track of my versions. This technique is good if I make a mistake.
         </p>
     {/each}
 
