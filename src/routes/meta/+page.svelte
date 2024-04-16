@@ -139,6 +139,7 @@
                     date: new Date(row.date + "T00:00" + row.timezone),
                     datetime: new Date(row.datetime)
                 }));
+
         
         commits = d3.groups(data, d => d.commit).map(([commit, lines]) => {
                 let first = lines[0];
@@ -277,18 +278,24 @@
 
     let commitProgress = 0;
     $: commitMaxTime = timeScale && timeScale.invert(commitProgress);
+    $: {
+        console.log('here,', commitProgress)
+    } 
+        $: filteredCommits = commits.filter(commit => {
+        return commit.datetime <= commitMaxTime;
+        });
 
-   $: {
-    console.log('here,', commitProgress)
-   } 
-
-    $: filteredCommits = commits.filter(commit => {
-       return commit.datetime <= commitMaxTime;
-    });
-
+    // for lines
+    let raceProgress = 0;
+    $: {
+        console.log('race', raceProgress)
+        console.log('hihi', data)
+    }
+    $: commitMaxTimeLine = timeScale && timeScale.invert(raceProgress);
     $: filteredLines = data.filter(line => {
-       return line.datetime <= commitMaxTime;
+       return line.datetime <= commitMaxTimeLine;
     });
+
 
     $: xScale = d3.scaleTime()
                 .domain(d3.extent(filteredCommits.map(commit => commit.datetime)))
@@ -448,3 +455,16 @@
 
 
 
+<Scrolly bind:progress={raceProgress} --scrolly-layout="viz-first">
+
+	{#each data as line, index }
+        <p>
+            On {line.datetime.toLocaleString("en", {dateStyle: "full", timeStyle: "short"})}, I wrote a line with a length of {line.length} in {line.type}.
+
+            It's nice to see which types of code I'm writing.
+        </p>
+    {/each}
+	<svelte:fragment slot="viz">
+		<FileLines lines={filteredLines} colors ={colors}/>
+	</svelte:fragment>
+</Scrolly>
