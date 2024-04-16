@@ -36,6 +36,7 @@
 
     .tooltip {
         position: fixed;
+        z-index: 1;
         /* top: 1em; */
         /* top: left; */
 
