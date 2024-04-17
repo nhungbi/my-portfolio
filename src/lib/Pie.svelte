@@ -27,7 +27,7 @@
         pieData = d3.sort(data, d => d.label);
         oldData = pieData;
         pieData = data.map(d => ({...d}));
-        let arcData = sliceGenerator(data);
+        let arcData = sliceGenerator(pieData);
         let arcs = arcData.map(d => arcGenerator(d));
         pieData = pieData.map((d, i) => ({...d, ...arcData[i], arc: arcs[i]}));
         // console.log(data)
@@ -53,7 +53,7 @@
         let d_old = oldData.find(d => d.label === label);
 
         let from = d_old ? {...d_old} : getEmptyArc(label, oldData);
-        let to = d ? {...d} : getEmptyArc(label, oldData);
+        let to = d ? {...d} : getEmptyArc(label, pieData);
 
         let angleInterpolator = d3.interpolate(from, to);
 
@@ -207,7 +207,6 @@
         transition-property: transform, opacity, fill;
 
     } 
-
 
     
 </style>
